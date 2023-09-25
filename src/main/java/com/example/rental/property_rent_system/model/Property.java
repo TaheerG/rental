@@ -1,4 +1,4 @@
-package com.example.rental.property;
+package com.example.rental.property_rent_system.model;
 
 
 import jakarta.persistence.Entity;
