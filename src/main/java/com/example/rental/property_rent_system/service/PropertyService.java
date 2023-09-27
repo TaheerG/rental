@@ -32,10 +32,10 @@ public class PropertyService {
 
     @Transactional
     public void updateProperty(Long propertyId, double rent){
-//        Retrieve the student by ID
+//        Retrieve the property by ID
         Optional<Property> optionalProperty = propertyRepository.findById(propertyId);
 
-//        check if the student exists, if not throw an exception
+//        check if the property exists, if not throw an exception
         Property property = optionalProperty.orElseThrow(() ->
         new IllegalStateException("Property with id " + propertyId + " does not exist"));
 
@@ -44,6 +44,12 @@ public class PropertyService {
         propertyRepository.save(property);
     }
     public void deleteProperty(Long propertyId) {
+        boolean exists = propertyRepository.existsById(propertyId);
+        if (!exists) {
+            throw new IllegalStateException(
+                    "tenant with id " + propertyId + " does not exist"
+            );
+        }
         propertyRepository.deleteById(propertyId);
     }
 }
