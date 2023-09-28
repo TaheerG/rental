@@ -2,6 +2,9 @@ package com.example.rental.property_rent_system.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table
@@ -15,10 +18,12 @@ public class Tenant {
     private String email;
     private String phone;
     private String address;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "property_id", nullable = true)
-
     private Property property;
+
+    @OneToMany(mappedBy = "tenant", cascade = CascadeType.ALL)
+    private List<Rental> rentals = new ArrayList<>();
 
     public Tenant() {
     }

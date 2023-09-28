@@ -1,6 +1,9 @@
 package com.example.rental.property_rent_system.controller;
 
 
+import com.example.rental.property_rent_system.dto.RentalRequestDTO;
+import com.example.rental.property_rent_system.dto.TenantRequestDTO;
+import com.example.rental.property_rent_system.model.Rental;
 import com.example.rental.property_rent_system.model.Tenant;
 import com.example.rental.property_rent_system.service.TenantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +31,9 @@ public class TenantController {
     }
 
     @PostMapping
-    public void addTenant(@RequestBody Tenant tenant){
-        tenantService.addNewTenant(tenant);
+    public ResponseEntity<Tenant> createTenant(@RequestBody TenantRequestDTO tenantRequestDTO) {
+        Tenant createdTenant = tenantService.createTenant(tenantRequestDTO);
+        return new ResponseEntity<>(createdTenant, HttpStatus.CREATED);
     }
 
     @PutMapping(path = "{tenantId}")

@@ -1,6 +1,9 @@
 package com.example.rental.property_rent_system.service;
 
+import com.example.rental.property_rent_system.dto.RentalRequestDTO;
+import com.example.rental.property_rent_system.dto.TenantRequestDTO;
 import com.example.rental.property_rent_system.model.Property;
+import com.example.rental.property_rent_system.model.Rental;
 import com.example.rental.property_rent_system.model.Tenant;
 import com.example.rental.property_rent_system.repository.PropertyRepository;
 import com.example.rental.property_rent_system.repository.TenantRepository;
@@ -30,12 +33,25 @@ public class TenantService {
     }
 
 
-    public void addNewTenant(Tenant tenant) {
+    public Tenant createTenant(TenantRequestDTO tenantRequestDTO) {
+        // Check if property and tenant exist
+        Property property = propertyRepository.findById(tenantRequestDTO.getPropertyId())
+                .orElseThrow(() -> new EntityNotFoundException("Property not found"));
 
-        String propertyAddress = tenant.getProperty() != null ? tenant.getProperty().getAddress() : null;
-        tenantRepository.save(tenant);
+        // Check if the property is already associated with a tenant
+        if (tenantRepository.existsByProperty(property)) {
+            throw new IllegalStateException("Property is already associated with a tenant");
+        }
+        // Create a new Rental object
+        Tenant tenant = new Tenant();
+        tenant.setName(tenantRequestDTO.getName());
+        tenant.setEmail(tenantRequestDTO.getEmail());
+        tenant.setAddress(tenantRequestDTO.getAddress());
+        tenant.setPhone(tenantRequestDTO.getPhone());
+        tenant.setProperty(property);
+
+        return tenantRepository.save(tenant);
     }
-
     @Transactional
     public void updateTenant(Long tenantId, String name, String email, String phone, String address) {
         // Retrieve the student by ID

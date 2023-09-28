@@ -4,6 +4,9 @@ package com.example.rental.property_rent_system.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table
 public class Property {
@@ -15,6 +18,12 @@ public class Property {
     private String address;
     private int numberOfRooms;
     private double rent;
+
+//    @OneToMany(mappedBy = "property", cascade = CascadeType.REMOVE)
+//    private List<Rental> rentals;
+
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
+    private List<Rental> rentals = new ArrayList<>();
 
     public Property() {
     }
